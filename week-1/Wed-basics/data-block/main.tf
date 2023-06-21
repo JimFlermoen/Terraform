@@ -7,13 +7,6 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 data "aws_region" "current" {}
 
-# Local Variables
-locals {
-  team        = "api_mgmt_dev"
-  application = "corp_api"
-  server_name = "ec2-${var.environment}-api-${var.variables_sub_az}"
-}
-
 # Terraform Data Block - Lookup Ubuntu 20.04
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -39,6 +32,7 @@ resource "aws_vpc" "vpc" {
     Name        = var.vpc_name
     Environment = "demo_environment"
     Terraform   = "true"
+    Region      = data.aws_region.current.name
   }
 }
 
@@ -146,10 +140,7 @@ resource "aws_instance" "web_server" {                            # BLOCK
   instance_type = "t2.micro"                                      # Argument
   subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id # Argument with value as expression
   tags = {
-    Name  = local.server_name
-    Owner = local.team
-    app   = local.application
-
+    Name = "Web EC2 Server"
   }
 }
 

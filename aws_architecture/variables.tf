@@ -1,3 +1,5 @@
+# Variables
+
 variable "aws_region" {
   type    = string
   default = "us-east-1"
@@ -29,6 +31,8 @@ variable "public_subnets" {
   }
 }
 
+
+# Create variables so values not it main.tf
 variable "variables_sub_cidr" {
   description = "CIDR Block for the Variables Subnet"
   type        = string

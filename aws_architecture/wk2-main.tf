@@ -107,6 +107,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 
 #Create EIP for NAT Gateway
 resource "aws_eip" "nat_gateway_eip" {
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
     Name = "demo_igw_eip"
@@ -350,60 +351,4 @@ output "public_ip_server_subnet_1" {
 
 output "public_dns_server_subnet_1" {
   value = module.server_subnet_1.public_dns
-}
-
-module "autoscaling" {
-  source  = "terraform-aws-modules/autoscaling/aws"
-  version = "4.9.0"
-
-  # Autoscaling group
-  name = "myasg"
-
-  vpc_zone_identifier = [aws_subnet.private_subnets["private_subnet_1"].id, aws_subnet.private_subnets["private_subnet_2"].id, aws_subnet.private_subnets["private_subnet_3"].id]
-  min_size            = 0
-  max_size            = 1
-  desired_capacity    = 1
-
-  # Launch template
-  use_lt    = true
-  create_lt = true
-
-  image_id      = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
-
-  tags_as_map = {
-    Name = "Web EC2 Server 2"
-  }
-
-}
-
-output "asg_group_size" {
-  value = module.autoscaling.autoscaling_group_max_size
-}
-
-
-module "s3-bucket" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "3.14.0"
-}
-output "s3_bucket_name" {
-  value = module.s3-bucket.s3_bucket_bucket_domain_name
-}
-
-
-module "vpc" {
-  source             = "terraform-aws-modules/vpc/aws"
-  version            = "5.0.0"
-  name               = "my-vpc-terraform"
-  cidr               = "10.0.0.0/16"
-  azs                = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  private_subnets    = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-  enable_nat_gateway = true
-  enable_vpn_gateway = true
-  tags = {
-    Name        = "VPC from Module"
-    Terraform   = "true"
-    Environment = "dev"
-  }
 }

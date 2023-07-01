@@ -2,8 +2,7 @@ terraform {
   required_version = ">= 1.0.0"
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = ">= 3.0"
+      source = "hashicorp/aws"
     }
     http = {
       source  = "hashicorp/http"
@@ -21,5 +20,15 @@ terraform {
       source  = "hashicorp/tls"
       version = "3.1.0"
     }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "2.84.0"
+    }
+  }
+}
+
+terraform {
+  backend "local" {
+    path = "mystate/terraform.tfstate"
   }
 }

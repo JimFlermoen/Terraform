@@ -14,9 +14,7 @@ terraform {
 }
 
 terraform {
-  backend "s3" {
-    bucket = "jf-tf-backend07423"
-    key    = "week-21/backend"
-    region = "us-east-1"
+  backend "local" {
+    path = "mystate/terraform.tfstate"
   }
 }

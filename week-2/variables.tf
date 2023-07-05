@@ -1,4 +1,4 @@
-# Variables
+# --Variable Child Module--
 
 variable "aws_region" {
   type    = string
@@ -20,27 +20,32 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
-variable "asg_name" {
-  type    = string
-  default = "asg"
-}
-
-variable "desired_capacity" {
-  type    = string
-  default = "2"
-}
-
-variable "max" {
-  type    = string
-  default = "5"
-}
-
-variable "min" {
-  type    = string
-  default = "2"
-}
-
 variable "key_name" {
   type    = string
   default = "Projectkey"
+}
+
+variable "availability_zones" {
+  type    = list(string)
+  default = (["us-east-1a", "us-east-1b"])
+}
+
+variable "desired_capacity" {
+  type    = number
+  default = 2
+}
+
+variable "max" {
+  type    = number
+  default = 5
+}
+
+variable "min" {
+  type    = number
+  default = 2
+}
+
+variable "cidr_blocks" {
+  type    = list(string)
+  default = ["0.0.0.0/0"]
 }

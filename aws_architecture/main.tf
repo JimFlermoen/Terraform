@@ -72,7 +72,7 @@ resource "aws_vpc" "vpc" {
 
   tags = {
     Name        = upper(var.vpc_name)
-    Environment = upper(var.environment)
+    Environment = var.environment
     Terraform   = upper("true")
   }
 
@@ -267,7 +267,7 @@ resource "tls_private_key" "generated" {
 }*/
 
 resource "aws_key_pair" "generated" {
-  key_name   = "MyAWSKey"
+  key_name   = "MyAWSKey${var.environment}"
   public_key = tls_private_key.generated.public_key_openssh
 }
 
@@ -404,7 +404,7 @@ resource "aws_security_group" "main" {
   }
   lifecycle {
     create_before_destroy = true
-   # prevent_destroy       = true
+    # prevent_destroy       = true
   }
 }
 
